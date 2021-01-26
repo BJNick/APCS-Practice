@@ -4,11 +4,11 @@ handin.py
 Generates a letter to Mr. Ruo
 """
 
-import klembord
-import datetime
-from os import listdir
+import klembord # Copy paste
+import datetime # Get hour
+from os import listdir # Get all files
 from os.path import isfile, join
-
+import importlib.util # Get docstring
 
 klembord.init()
 
@@ -26,9 +26,16 @@ if files == "all":
 else:
     files = files.split(",")
 
+lower_first = lambda test_str: test_str[:1].lower() + \
+               test_str[1:] if test_str else ''
+
 for i, f in enumerate(files):
     f = f.strip()
-    files[i] = '<a href="' + link_start + unit + "/" + f + '">' + f + '</a>'
+    python_module = importlib.import_module(unit+"."+f.replace(".py", ""))
+    files[i] = '<li><a href="' + link_start + unit + "/" + f + '">' + f + '</a>  ' \
+        + lower_first(python_module.__doc__.splitlines()[3].strip()) + ''
+
+
 
 greeting = "Good morning" if datetime.datetime.now().hour < 12 else "Good afternoon" if datetime.datetime.now().hour < 17 else "Good evening"
 
@@ -36,6 +43,7 @@ pretty_unit = unit.split("les")
 pretty_unit = pretty_unit[0].replace("unit", "Unit ").replace("_","") + " " + pretty_unit[1].replace("_", "-").replace("son", "Lessons ").replace("/hw", " homework")
 
 email = greeting + " Mr. Ruo,<br><br>I have completed " + pretty_unit + ". Here are the files:<br>"
+
 
 for f in files:
     email = email + f + "<br>"
