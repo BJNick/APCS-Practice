@@ -4,22 +4,43 @@ handin.py
 Generates a letter to Mr. Ruo
 """
 
-import klembord # Copy paste
+import klembord # Copy/paste
 import datetime # Get hour
-from os import listdir # Get all files
-from os.path import isfile, join
+from os import listdir # List all entities in a directory
+from os.path import isfile, join # Check for files
 import importlib.util # Get docstring
+import sys # Console arguments
 
 klembord.init()
 
 link_start = "https://github.com/BJNick/APCS-Practice/tree/master/"
 
-unit = input("Enter folder: ")
+
+onlyfolders = [f for f in listdir("./") if (not isfile(join("./", f)) and
+    f.startswith("unit"))]
+onlyfolders.sort(key=lambda f: int(f.split("_")[0].replace("unit", "")) * 10
+                               + int(f.split("_")[-1].replace("lesson", "")))
+print(onlyfolders)
+
+if (len(sys.argv) > 1):
+    unit = sys.argv[1]
+else:
+    unit = input("Enter folder: ")
+
+if (unit == "latest"):
+    unit = onlyfolders[-1]
+
+
+if (unit == "latest hw"):
+    unit = onlyfolders[-1]+"/hw"
 
 onlyfiles = [f for f in listdir(unit) if isfile(join(unit, f))]
 print(onlyfiles)
 
-files = input("Enter files: ")
+if (len(sys.argv) > 2):
+    files = sys.argv[2]
+else:
+    files = input("Enter files: ")
 
 if files == "all":
     files = onlyfiles
@@ -31,9 +52,9 @@ lower_first = lambda test_str: test_str[:1].lower() + \
 
 for i, f in enumerate(files):
     f = f.strip()
-    python_module = importlib.import_module(unit+"."+f.replace(".py", ""))
+    python_module = importlib.import_module(unit.replace("/", ".")+"."+f.replace(".py", ""))
     files[i] = '<li><a href="' + link_start + unit + "/" + f + '">' + f + '</a>  ' \
-        + lower_first(python_module.__doc__.splitlines()[3].strip()) + ''
+        + lower_first(python_module.__doc__.splitlines()[3].strip()) + '</li>'
 
 
 
@@ -44,9 +65,12 @@ pretty_unit = pretty_unit[0].replace("unit", "Unit ").replace("_","") + " " + pr
 
 email = greeting + " Mr. Ruo,<br><br>I have completed " + pretty_unit + ". Here are the files:<br>"
 
+email = email + '<ul style="padding-left: 20px;">'
 
 for f in files:
-    email = email + f + "<br>"
+    email = email + f
+
+email = email + '</ul>'
 
 email = email + "<br>Mykyta S."
 
