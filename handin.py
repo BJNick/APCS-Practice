@@ -14,6 +14,7 @@ import sys # Console arguments
 klembord.init()
 
 link_start = "https://github.com/BJNick/APCS-Practice/tree/master/"
+raw_link_start = "https://raw.githubusercontent.com/BJNick/APCS-Practice/master/"
 
 
 onlyfolders = [f for f in listdir("./") if (not isfile(join("./", f)) and
@@ -35,6 +36,7 @@ if (unit == "latest hw"):
     unit = onlyfolders[-1]+"/hw"
 
 onlyfiles = [f for f in listdir(unit) if isfile(join(unit, f))]
+onlyfiles.sort(key=lambda f: ("0" if f.endswith(".py") else "") + f)
 print(onlyfiles)
 
 if (len(sys.argv) > 2):
@@ -52,9 +54,14 @@ lower_first = lambda test_str: test_str[:1].lower() + \
 
 for i, f in enumerate(files):
     f = f.strip()
-    python_module = importlib.import_module(unit.replace("/", ".")+"."+f.replace(".py", ""))
+    explanation = "- a supplementary file"
+    if (f.endswith(".py")):
+        python_module = importlib.import_module(unit.replace("/", ".")+"."+f.replace(".py", ""))
+        explanation = python_module.__doc__.splitlines()[3].strip()
     files[i] = '<li><a href="' + link_start + unit + "/" + f + '">' + f + '</a>  ' \
-        + lower_first(python_module.__doc__.splitlines()[3].strip()) + '</li>'
+        + lower_first(explanation) + '</li>'
+    if f.endswith(".png") or f.endswith(".jpg"):
+        files[i] = files[i] + '<img style="max-width: 75%; max-height: 75%; border: 1px solid; margin: auto;" src="' + raw_link_start + unit + "/" + f +'" alt="' + f + '">'
 
 
 
