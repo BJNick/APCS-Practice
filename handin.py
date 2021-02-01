@@ -50,6 +50,10 @@ if files == "all":
 else:
     files = files.split(",")
 
+include_supplementary = False
+if (len(sys.argv) > 3):
+    include_supplementary = (sys.argv[3] == "-s")
+
 lower_first = lambda test_str: test_str[:1].lower() + \
                test_str[1:] if test_str else ''
 
@@ -60,6 +64,9 @@ for i, f in enumerate(files):
         python_module = importlib.import_module(unit.replace("/", ".") + "."
                                                 + f.replace(".py", ""))
         explanation = python_module.__doc__.splitlines()[3].strip()
+    elif not include_supplementary:
+        files[i] = ""
+        continue
 
     files[i] = '<li><a href="%s/%s">%s</a> %s</li>' \
                % (link_start + unit, f, f, lower_first(explanation))
