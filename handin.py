@@ -88,7 +88,7 @@ email = email + '</ul>'
 
 email = email + "<br>Mykyta S."
 
-email = email + '<br><br>P.S. This entire email was automatically generated' \
+email = email + '<br><br>P.S. This entire email was automatically generated ' \
                 'with <a href="%shandin.py">handin.py</a>' % (link_start)
 
 print()
