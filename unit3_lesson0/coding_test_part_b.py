@@ -25,5 +25,6 @@ def encode(text):
 
 
 if __name__ == "__main__":
+    # Call the function with user input
     text = input("Enter message: ")
     print("Encoded message: ", encode(text))

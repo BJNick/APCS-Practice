@@ -20,7 +20,7 @@ raw_link_start = \
 
 onlyfolders = [f for f in listdir("./") if (not isfile(join("./", f)) and
     f.startswith("unit"))]
-onlyfolders.sort(key=lambda f: int(f.split("_")[0].replace("unit", "")) * 10
+onlyfolders.sort(key=lambda f: int(f.split("_")[0].replace("unit", "")) * 100
                                + int(f.split("_")[-1].replace("lesson", "")))
 print(onlyfolders)
 
