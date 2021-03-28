@@ -33,7 +33,7 @@ if (unit == "latest"):
     unit = onlyfolders[-1]
 
 
-if (unit == "latest hw"):
+if (unit == "latest_hw"):
     unit = onlyfolders[-1]+"/hw"
 
 onlyfiles = [f for f in listdir(unit) if isfile(join(unit, f))]
